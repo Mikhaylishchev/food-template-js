@@ -132,5 +132,85 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    class menuCard {         //    Menu cards
+
+        constructor(src, alt, title, descr, price, parentElement, ...classes) {
+
+            this.src = src;
+            this.alt = alt;
+            this.title = title;
+            this.descr = descr;
+            this.price = price;
+            this.transfer = 76;
+            this.parentElement = document.querySelector(parentElement);
+            this.classes = classes;
+            this.changeToUAH();
+        }
+
+        changeToUAH() {
+
+            this.price = this.price * this.transfer
+        }
+
+        render() {
+
+            const card = document.createElement('div');
+
+            if (!this.classes.length) {
+
+                card.classList.add('menu__item')
+            } else {
+
+                this.classes.forEach(className => card.classList.add(className))
+            }
+
+            this.classes.forEach(className => card.classList.add(className))
+
+            card.innerHTML =
+
+                `
+                <img src=${this.src} alt=${this.alt}>
+                <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr">${this.descr}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                </div>
+            `
+
+            this.parentElement.append(card)
+        }
+    }
+
+    new menuCard(
+        'img/tabs/vegy.jpg',
+        'vegy',
+        'Меню "Фитнес"',
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+        22,
+        '.menu .container',
+    ).render();
+
+    new menuCard(
+        'img/tabs/elite.jpg',
+        'elite',
+        'Меню “Премиум”',
+        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+        32,
+        '.menu .container',
+    ).render();
+
+    new menuCard(
+        'img/tabs/post.jpg',
+        'post',
+        'Меню "Постное"',
+        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
+        42,
+        '.menu .container',
+    ).render();
+
+
+
     window.addEventListener('scroll', showModalByScroll)
 })
