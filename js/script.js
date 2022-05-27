@@ -2,7 +2,7 @@
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    const tabs = document.querySelectorAll('.tabheader__item');         //      Tabs
+    const tabs = document.querySelectorAll('.tabheader__item'); //      Tabs
     const tabsContent = document.querySelectorAll('.tabcontent');
     const tabClassActive = 'tabheader__item_active';
 
@@ -37,7 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const deadline = '2022-09-01';      //      Timer
+    const deadline = '2022-09-01'; //      Timer
 
     function getTimeRemaining(endtime) {
 
@@ -89,7 +89,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-    const modalTriggers = document.querySelectorAll('[data-modal]')         //      Modal
+    const modalTriggers = document.querySelectorAll('[data-modal]') //      Modal
     const modal = document.querySelector('.modal');
     // const modalCloser = document.querySelector('[data-close]');
 
@@ -132,7 +132,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    class menuCard {         //    Menu cards
+    class menuCard { //    Menu cards
 
         constructor(src, alt, title, descr, price, parentElement, ...classes) {
 
@@ -212,5 +212,64 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-    window.addEventListener('scroll', showModalByScroll)
+    const forms = document.querySelectorAll('form');        //      Forms
+
+    const messages = {
+
+        loading: 'Loading...',
+        success: 'Thanks, we\'ll call you later',
+        failure: 'Somethimg wrong'
+    }
+
+    forms.forEach(form => postData(form));
+
+    function postData(form) {
+
+        form.addEventListener('submit', (event) => {
+
+            event.preventDefault();
+
+            const statusMessage = document.createElement('div');
+            statusMessage.textContent = messages.loading;
+            form.append(statusMessage);
+
+            const request = new XMLHttpRequest();       //      XMLHttpRequest
+            request.open('POST', 'server.php');
+
+            request.setRequestHeader('Conten-type', 'application/json');     //  Only for JSON
+
+            const formData = new FormData(form);
+            const obj = {};     //  Only for JSON
+
+            formData.forEach((key, val) => obj[key] = val);     //  Only for JSON
+
+            const json = JSON.stringify(obj);     //  Only for JSON
+
+            request.send(json);
+
+            request.addEventListener('load', () => {
+
+                if (request.status === 200) {
+
+                    console.log(request.response);
+                    
+                    statusMessage.textContent = messages.success;
+
+                    form.reset();
+
+                    setTimeout(() => {
+
+                        statusMessage.remove();
+                        closeModal()
+                    }, 2000);
+                } else {
+
+                    statusMessage.textContent = messages.failure;
+                }
+            })
+
+        })
+    }
+
+    window.addEventListener('scroll', showModalByScroll);
 })
