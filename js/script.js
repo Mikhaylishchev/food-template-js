@@ -132,6 +132,8 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    window.addEventListener('scroll', showModalByScroll);
+
     class menuCard { //    Menu cards
 
         constructor(src, alt, title, descr, price, parentElement, ...classes) {
@@ -216,9 +218,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const messages = {
 
-        loading: 'Loading...',
+        loading: '../img/spinner.svg',
         success: 'Thanks, we\'ll call you later',
-        failure: 'Somethimg wrong'
+        failure: 'Something wrong'
     }
 
     forms.forEach(form => postData(form));
@@ -229,9 +231,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
             event.preventDefault();
 
-            const statusMessage = document.createElement('div');
-            statusMessage.textContent = messages.loading;
-            form.append(statusMessage);
+            const statusMessage = document.createElement('img');
+            statusMessage.src = messages.loading;
+            statusMessage.style.cssText = `
+
+                display: block;
+                margin: 0 auto;
+            `;
+
+            form.insertAdjacentElement("afterend", statusMessage);
 
             const request = new XMLHttpRequest();       //      XMLHttpRequest
             request.open('POST', 'server.php');
@@ -252,24 +260,45 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (request.status === 200) {
 
                     console.log(request.response);
-                    
-                    statusMessage.textContent = messages.success;
+
+                    showThanksModal(messages.success)
 
                     form.reset();
 
-                    setTimeout(() => {
+                    statusMessage.remove();
 
-                        statusMessage.remove();
-                        closeModal()
-                    }, 2000);
                 } else {
 
-                    statusMessage.textContent = messages.failure;
+                    showThanksModal(messages.failure)
                 }
-            })
-
-        })
+            });
+        });        
     }
 
-    window.addEventListener('scroll', showModalByScroll);
+    const showThanksModal = (message) => {      //      thanksModal
+
+        const prevModal = document.querySelector('.modal__dialog');
+        prevModal.classList.add('hide');
+        openModal();
+
+        const thanksModal = document.createElement('div');
+        thanksModal.classList.add('modal__dialog');
+        thanksModal.innerHTML = `
+
+            <div class="modal__content">
+                <div class="modal__close" data-close>&times</div>
+                <div class="modal__title">${message}</div>
+            </div>
+        `;
+        
+        document.querySelector('.modal').append(thanksModal);
+
+        setTimeout(() => {
+            
+            thanksModal.remove();
+            prevModal.classList.remove('hide');
+            closeModal();
+        }, 3000);
+    }
+
 })
