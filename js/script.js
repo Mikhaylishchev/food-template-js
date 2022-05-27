@@ -86,4 +86,51 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     setClock('.timer', deadline);
+
+
+
+    const modalTriggers = document.querySelectorAll('[data-modal]')         //      Modal
+    const modal = document.querySelector('.modal');
+    // const modalCloser = document.querySelector('[data-close]');
+
+    const openModal = () => {
+
+        modal.classList.add('fade', 'show');
+        document.body.style.overflow = 'hidden';
+        window.removeEventListener('scroll', showModalByScroll);
+    }
+
+    const closeModal = () => {
+
+        modal.classList.remove('show');
+        document.body.style.overflow = 'scroll';
+    }
+
+    modalTriggers.forEach(btn => { //  open modal
+
+        btn.addEventListener('click', () => {
+
+            openModal();
+        })
+    });
+
+    modal.addEventListener('click', (event) => { //  close modal
+
+        if (event.target.classList.contains('modal') || event.target.getAttribute('data-close') == '') closeModal();
+    });
+
+    document.addEventListener('keydown', (event) => {
+
+        if (modal.classList.contains('show') && event.code === "Escape") closeModal();
+    })
+
+    function showModalByScroll() { //  Событие по достижению конца страницы
+
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+
+            setTimeout(openModal, 3000);
+        }
+    }
+
+    window.addEventListener('scroll', showModalByScroll)
 })
