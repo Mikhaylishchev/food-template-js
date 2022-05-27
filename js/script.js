@@ -247,15 +247,40 @@ window.addEventListener('DOMContentLoaded', () => {
             request.setRequestHeader('Conten-type', 'application/json');     //  Only for JSON
 
             const formData = new FormData(form);
-            const obj = {};     //  Only for JSON
+            fetch('server.php', {       //      Fetch
+
+                method: 'POST',
+                // headers: {'Content-type': 'application/json'},
+                body: formData
+                
+            }).then(data => data.text())
+            
+            .then(data => {
+
+                console.log(data);
+
+                showThanksModal(messages.success)
+
+                statusMessage.remove();
+            }).catch(() => {
+
+                showThanksModal(messages.failure)
+            }).finally(() => {
+
+                form.reset();
+            })
+
+            /* const obj = {};     //  Only for JSON
 
             formData.forEach((key, val) => obj[val] = key);     //  Only for JSON
 
             const json = JSON.stringify(obj);     //  Only for JSON
 
-            request.send(json);
+            request.send(json); */
 
-            request.addEventListener('load', () => {
+            
+
+            /* request.addEventListener('load', () => {
 
                 if (request.status === 200) {
 
@@ -271,8 +296,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
                     showThanksModal(messages.failure)
                 }
-            });
-        });        
+            }); */
+        });         
     }
 
     const showThanksModal = (message) => {      //      thanksModal
