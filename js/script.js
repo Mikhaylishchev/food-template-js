@@ -241,7 +241,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(form);
             const obj = {};     //  Only for JSON
 
-            formData.forEach((key, val) => obj[key] = val);     //  Only for JSON
+            formData.forEach((key, val) => obj[val] = key);     //  Only for JSON
 
             const json = JSON.stringify(obj);     //  Only for JSON
 
