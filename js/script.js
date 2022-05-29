@@ -424,8 +424,31 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     const result = document.querySelector('.calculating__result span'); //      Calculator
-    let sex = 'female', height, weight, age, ratio = 1.375;
+    let sex = localStorage.getItem('sex') || 'female', 
+        height,
+        weight,
+        age,
+        ratio = localStorage.getItem('ratio') || 1.375;
 
+    function initLocalSettings(selector, activityClass) {
+
+        let elements = document.querySelectorAll(selector);
+
+        elements.forEach(item => {
+
+            if(item.getAttribute('id') === sex || item.getAttribute('data-ratio') === ratio) {
+
+                elements.forEach(item => item.classList.remove(activityClass));
+               
+                item.classList.add(activityClass);
+            }
+        });
+    }
+
+    initLocalSettings('#gender div', 'calculating__choose-item_active');
+    initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
+
+    
     function calcResult() {
 
         if (!sex || !height || !weight || !age || !ratio) {
@@ -454,9 +477,12 @@ window.addEventListener('DOMContentLoaded', () => {
             if(event.target.getAttribute('data-ratio')) {
 
                 ratio = +event.target.getAttribute('data-ratio');
+                localStorage.setItem('ratio', ratio);
+
             } else if(event.target.getAttribute('id')) {
 
                 sex = event.target.getAttribute('id');
+                localStorage.setItem('sex', sex);
             }
 
             if(event.target.classList.contains('calculating__choose-item')){
@@ -468,6 +494,7 @@ window.addEventListener('DOMContentLoaded', () => {
         })
     }
 
+
     getStaticData('#gender', 'calculating__choose-item_active');
     getStaticData('.calculating__choose_big', 'calculating__choose-item_active');
 
@@ -476,6 +503,8 @@ window.addEventListener('DOMContentLoaded', () => {
         const input = document.querySelector(selector);
 
         input.addEventListener('input', () => {
+                
+            input.value = input.value.replace(/\D/g, '');   //  valid           
 
             switch(input.getAttribute('id')) {
 
