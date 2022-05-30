@@ -85,7 +85,7 @@ export const slider = () => {
 
     prev.addEventListener('click', () => {
 
-        if (offset === 0) {
+        if (currentSlide === 1) {
 
             offset = +width.slice(0, -2) * (slidesAmount - 1);
             currentSlide = slidesAmount;
